@@ -18,7 +18,7 @@ def signup_views(request):
         
         query = text('INSERT INTO "signup" ("first_name","last_name","email","password","gender","dob") VALUES (:firstname, :lastname,:email,:password,:gender,dob)')
         
-        # print(query)
+        print(query)
         # query = text('INSERT INTO employee ("first_name","first_name","email","password","gender","dob") VALUES (userdata["firstname"], userdata["lastname"],userdata["email"],pwdhash,userdata["gender"],userdata["dob"])')
         execute_query_without_return_value(query,userdata)
         return response('create', 'success', {})
