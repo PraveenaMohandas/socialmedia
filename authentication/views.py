@@ -9,20 +9,30 @@ from sqlalchemy import text
 def signup_views(request):
     try:
         userdata=request
-        pwdhash= generate_password_hash(password=userdata["password"])
-        userdata["password"]= pwdhash
-        print(pwdhash)
+
+        # # db.execute("Select * from signup WHERE first_name=%s",(userdata["firstname"]))
+        # pwdhash= generate_password_hash(password=userdata["password"])
+        # userdata["password"]= 'wdfjejrf'
+        # print(pwdhash)
+
         # columns = ', '.join("`" + str(x).replace('/', '_') + "`" for x in userdata.keys())
         # values = ', '.join("'" + str(x).replace('/', '_') + "'" for x in userdata.values())
         # query = text("INSERT INTO %s ( %s ) VALUES ( %s );" % ('public.signup', columns, values))
         
-        query = text('INSERT INTO "signup" ("first_name","last_name","email","password","gender","dob") VALUES (:firstname, :lastname,:email,:password,:gender,dob)')
+        # query = text('INSERT INTO "signup" ("first_name","last_name","email","password","gender","dob") VALUES (:firstname, :lastname,:email,:password,:gender,dob)')
         
-        print(query)
+
+        query="insert into signup (first_name,last_name,email, password, gender, dob) values ('{first_name}','{last_name}','{email}','{password}','{gender}','{dob}');".format(first_name=userdata['firstname'],last_name=userdata['lastname'],
+        email=userdata['email'],
+        password=userdata['password'],
+        gender=userdata['gender'],
+    dob=userdata['dob'])
         # query = text('INSERT INTO employee ("first_name","first_name","email","password","gender","dob") VALUES (userdata["firstname"], userdata["lastname"],userdata["email"],pwdhash,userdata["gender"],userdata["dob"])')
-        execute_query_without_return_value(query,userdata)
+        execute_query_without_return_value(query)
         return response('create', 'success', {})
     except Exception as e:
+        import traceback
+        print(traceback.format_exc())
         return response('create', 'success', {}, str(e))
 
 

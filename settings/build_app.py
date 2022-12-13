@@ -1,5 +1,4 @@
 from flask import Flask
-
 from common.middleware import middleware
 from settings.config.database import connect_to_db
 from settings.register_blueprint import register_blueprint
