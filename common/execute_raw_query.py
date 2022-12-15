@@ -27,8 +27,6 @@ def execute_query_without_return_value(query):
         return None
     except Exception as e:
         import traceback
-        print("||||||||||||||||||")
         print(traceback.format_exc())
-        print("+++++++++++++++++")
         print("Error ",e)
         return None
