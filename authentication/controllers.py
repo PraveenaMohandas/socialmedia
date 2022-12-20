@@ -8,16 +8,15 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 s= URLSafeTimedSerializer('secretkey')
 
-
-from authentication.views import signup_views, login_views, logout_views, token_required
+from authentication.views import signup_views, login_views, logout_views
 
 authentication = Blueprint('authentication-api', __name__, url_prefix='/api/v1/authentication/')
 
 
 @authentication.route('signup', methods=['GET','POST'])
 def signup_controller():
-    print("signup entered")
     if request.method == 'POST':
+        userid =request.json['userid']
         firstname = request.json['firstname']
         lastname = request.json['lastname']
         email = request.json['email']
@@ -25,7 +24,7 @@ def signup_controller():
         gender = request.json['gender']
         dob = request.json['dob']
         
-        userrequest=({"firstname": firstname, "lastname" : lastname,"email":email,"password":password,"gender":gender,"dob":dob})
+        userrequest=({"userid": userid,"firstname": firstname, "lastname" : lastname,"email":email,"password":password,"gender":gender,"dob":dob})
         token = s.dumps(email,salt='email-confirm')
 
         msg = Message('Confirm Email', sender="praveenamk8@gmail.com",recipients=[email])
@@ -51,16 +50,8 @@ def confirm_email(token):
 @authentication.route('login', methods=['POST'])
 def login_controller():
     if request.method == 'POST':
-        email = request.json['email']
-        password = request.json['password']
-        userrequest=({"email":email,"password":password})
-        
-        return login_views(userrequest)
+        return login_views(request.json['email'],request.json['password'])
 
-@authentication.route('log-auth', methods=['GET'])
-@token_required
-def auth():
-    return 'Logged in Successfully !'
 
 
 @authentication.route('logout', methods=['POST'])

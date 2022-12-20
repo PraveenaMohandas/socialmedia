@@ -23,7 +23,7 @@ mail = Mail(app)
 
 import secrets
 app.config['SECRET_KEY'] = secrets.token_urlsafe(12)
-secretkey=app.config['SECRET_KEY']
+SECRET_KEY=app.config['SECRET_KEY']
 
 if __name__ == "__main__":
     # print(app.url_map)

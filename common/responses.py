@@ -1,5 +1,5 @@
 from flask import jsonify
-
+import jwt
 
 def response(type, status, content, message=None):
     if type == 'create':
@@ -79,3 +79,13 @@ def unauthorized(content, msg, message=None):
     response.status_code = 401
     response.content_type = "application/json"
     return response
+
+def get_user_id(request):
+    token = request.headers['x-access-token']
+    if not token:
+        return False,""
+    print(token) 
+    current_user = jwt.decode(token,algorithms=["HS256"],options={"verify_signature": False})
+    print(current_user)
+
+    return  True,current_user["userid"]

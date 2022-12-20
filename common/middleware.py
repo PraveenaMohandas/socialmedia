@@ -1,8 +1,10 @@
-from flask import request
-
+from base64 import b64decode
+from flask import request, jsonify
+from functools import wraps
 from common.responses import response
+import jwt
+from datetime import datetime,timedelta
 
-from authentication.controllers import signup_controller, login_controller
 
 def middleware(app):
     @app.before_request
@@ -13,17 +15,38 @@ def middleware(app):
             print(api)
 
             if 'authentication' in api:
-                if 'signup' in api:
-                    return signup_controller()
-                elif 'login' in api:
-                    return login_controller()
                 pass
+            elif 'user' in api:
+                print("user api")
+                status=token_required(request)
+                print(status)
+                if not status:
+                    print(status)
+                    return response('create', 'unauthorized', {})
             else:
                 return response('create', 'unauthorized', {})
         except Exception as e:
             print(e)
             return response('create', 'unauthorized', {}, str(e))
 
+def token_required(request):
+    token=None
+    token = request.headers['x-access-token']
+    if not token:
+        return False
+    print(token) 
+    
+    current_user = jwt.decode(token,algorithms=["HS256"],options={"verify_signature": False})
+    print(current_user)
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print(current_time)
+    print(current_user['expiration'])
+    if current_time > current_user['expiration']:
+        print("yes time expired ")
+        return False    
+
+    return True
 
 def validate_auth_token(token):
     try:
