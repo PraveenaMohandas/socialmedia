@@ -17,11 +17,9 @@ def middleware(app):
             if 'authentication' in api:
                 pass
             elif 'user' in api:
-                print("user api")
                 status=token_required(request)
                 print(status)
                 if not status:
-                    print(status)
                     return response('create', 'unauthorized', {})
             else:
                 return response('create', 'unauthorized', {})
@@ -40,8 +38,6 @@ def token_required(request):
     print(current_user)
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
-    print(current_time)
-    print(current_user['expiration'])
     if current_time > current_user['expiration']:
         print("yes time expired ")
         return False    
