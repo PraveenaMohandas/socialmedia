@@ -6,9 +6,11 @@ def getuserdata(userid):
         query = "select * from signup where userid='{userid}';".format(userid=userid)
         userprofiledata=fetch_records(query)
         print(userprofiledata)
-        return response('retrieve', 'success',"data")
+        return response('retrieve', 'success',userprofiledata   )
 
     except Exception as e:
+        import traceback
+        print(traceback.format_exc())
         return response('failed', 'failed', {}, str(e))
 
 
