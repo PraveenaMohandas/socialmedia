@@ -39,3 +39,28 @@
 
 # ALTER TABLE IF EXISTS public.friends
 #     OWNER to postgres;
+
+# -- SAVE USER FEED TABLE
+
+# CREATE TABLE IF NOT EXISTS public.userfeed
+# (
+#     userid integer NOT NULL,
+#     title character varying(50) COLLATE pg_catalog."default" NOT NULL,
+#     description character varying(50) COLLATE pg_catalog."default" NOT NULL,
+#     image character varying(50) COLLATE pg_catalog."default" NOT NULL,
+#     tags character varying(50) COLLATE pg_catalog."default" NOT NULL,
+#     category character varying(50) COLLATE pg_catalog."default" NOT NULL,
+#     visibility character varying(20) COLLATE pg_catalog."default" NOT NULL,
+#     deleted_at timestamp with time zone,
+#     CONSTRAINT fk_signup FOREIGN KEY (userid)
+#         REFERENCES public.signup (userid) MATCH SIMPLE
+#         ON UPDATE NO ACTION
+#         ON DELETE NO ACTION
+# )
+# WITH (
+#     OIDS = FALSE
+# )
+# TABLESPACE pg_default;
+
+# ALTER TABLE IF EXISTS public.userfeed
+#     OWNER to postgres;

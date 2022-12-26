@@ -74,3 +74,44 @@ def acceptreq():
         statusupdate = execute_query_without_return_value(statusquery)
         return response('update', 'success',"Request Accepted")
 
+@user.route('save', methods=['GET','POST'])
+def savefeed():
+    status,userid=get_user_id(request)
+    userfeed = request.json['userfeed']
+    print(userfeed) 
+    try:
+        image = userfeed[i]['image']
+        from PIL import Image
+        img = Image.open(image)
+        print(img)
+        for i in range(len(userfeed)):
+            query="insert into userfeed (userid,title,description,image,tags,category,visibility,deleted_at) values ('{userid}','{title}','{description}','{image}','{tags}','{category}','{visibility}','{deleted_at}');".format(userid=userid,title=userfeed[i]['title'],description=userfeed[i]['description'],image=img,tags=userfeed[i]['tags'],category=userfeed[i]['category'],visibility=userfeed[i]['visibility'])
+            execute_query_without_return_value(query)
+            return response('create', 'success', "User feed Saved")
+    except Exception as e:
+            import traceback
+            print(traceback.format_exc())
+            return response('failed', 'failed', {}, str(e))
+
+@user.route('getuserfeed', methods=['GET','POST'])
+def getfeed():
+    visibility = request.json['visibility']
+    try:        
+        query = "select * from userfeed where visibility ='{visibility}' and deleted_at IS NULL;".format(visibility=visibility)
+        getuserfeed=fetch_records(query)
+        print(getuserfeed)
+        return response('retrieve', 'success',getuserfeed)
+        
+    except Exception as e:
+        import traceback
+        return response('failed', 'failed', {}, str(e))
+
+@user.route('deleteuserfeed/<userid>', methods=['GET','POST'])
+def deletefeed(userid):
+    deletequery = "UPDATE users SET deleted_at = now() WHERE userid ='{userid}';".format(userid=userid)
+    deleteuserfeed = execute_query_without_return_value(deletequery)
+    print(deleteuserfeed)
+    return response('update', 'success',"deleted")
+
+
+# UPDATE users SET deleted_at = current_timestamp WHERE id = userid ='{userid}';".format(userid=userid)

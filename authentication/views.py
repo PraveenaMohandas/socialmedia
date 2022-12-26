@@ -30,6 +30,7 @@ def login_views(email,password):
         print(SECRET_KEY)
         query = "select userid,password from signup where email='{email}';".format(email=email)
         dbdata=fetch_records(query)
+        print(dbdata)
         for i in range(len(dbdata)):
             userid=dbdata[i]['userid']
             userpassword=dbdata[i]['password']

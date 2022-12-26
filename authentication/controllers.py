@@ -53,7 +53,6 @@ def login_controller():
         return login_views(request.json['email'],request.json['password'])
 
 
-
 @authentication.route('logout', methods=['POST'])
 def logout_controller():
     return logout_views(request)
