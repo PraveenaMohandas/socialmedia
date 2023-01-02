@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import jsonify
 
-from .views import getuserdata,updateuserdata
+from .views import getuserdata,updateuserdata,friendslist
 
 user = Blueprint('profile-api', __name__, url_prefix='/api/v1/user/')
 from flask import request
@@ -35,6 +35,7 @@ def getallusers():
         query = "select * from signup where not userid='{userid}';".format(userid=userid)
         usersdata=fetch_records(query)
         print(usersdata)
+        
         return response('retrieve', 'success',usersdata   )
 
     except Exception as e:
@@ -47,8 +48,12 @@ def sendreq(receiverid):
     status,userid=get_user_id(request)
     if not status:
         return response('create', 'unauthorized',{"Token is missing"})
+
     query="insert into friends (userid,receiverid,status) values ('{userid}','{receiverid}','{status}');".format(userid=userid,receiverid=receiverid,status="pending")
     execute_query_without_return_value(query)
+
+    friendslist()
+
     return response('create', 'success', "Request Sent")
 
 @user.route('followreqlist', methods=['GET','POST'])
@@ -57,7 +62,6 @@ def reqlist():
     try:
         query = "select * from friends where receiverid ='{userid}';".format(userid=userid)
         reqlist=fetch_records(query)
-        print(reqlist)
         return response('retrieve', 'success',reqlist)
 
     except Exception as e:
@@ -78,16 +82,13 @@ def acceptreq():
 def savefeed():
     status,userid=get_user_id(request)
     userfeed = request.json['userfeed']
-    print(userfeed) 
     try:
-        image = userfeed[i]['image']
-        from PIL import Image
-        img = Image.open(image)
-        print(img)
-        for i in range(len(userfeed)):
-            query="insert into userfeed (userid,title,description,image,tags,category,visibility,deleted_at) values ('{userid}','{title}','{description}','{image}','{tags}','{category}','{visibility}','{deleted_at}');".format(userid=userid,title=userfeed[i]['title'],description=userfeed[i]['description'],image=img,tags=userfeed[i]['tags'],category=userfeed[i]['category'],visibility=userfeed[i]['visibility'])
-            execute_query_without_return_value(query)
-            return response('create', 'success', "User feed Saved")
+        # image= userfeed['image']
+        # from PIL import Image
+        # img = Image.open(image)
+        query="insert into userfeed (userid,title,description,image,tags,category,visibility,deleted_at) values ('{userid}','{title}','{description}','{image}','{tags}','{category}','{visibility}',NULL);".format(userid=userid,title=userfeed['title'],description=userfeed['description'],image=userfeed['image'],tags=userfeed['tags'],category=userfeed['category'],visibility=userfeed['visibility'])
+        execute_query_without_return_value(query)
+        return response('create', 'success', "User feed Saved")
     except Exception as e:
             import traceback
             print(traceback.format_exc())
@@ -108,6 +109,8 @@ def getfeed():
 
 @user.route('deleteuserfeed/<userid>', methods=['GET','POST'])
 def deletefeed(userid):
+    status,userid=get_user_id(request)
+
     deletequery = "UPDATE users SET deleted_at = now() WHERE userid ='{userid}';".format(userid=userid)
     deleteuserfeed = execute_query_without_return_value(deletequery)
     print(deleteuserfeed)
@@ -115,3 +118,5 @@ def deletefeed(userid):
 
 
 # UPDATE users SET deleted_at = current_timestamp WHERE id = userid ='{userid}';".format(userid=userid)
+
+

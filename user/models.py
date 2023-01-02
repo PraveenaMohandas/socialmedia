@@ -51,7 +51,7 @@
 #     tags character varying(50) COLLATE pg_catalog."default" NOT NULL,
 #     category character varying(50) COLLATE pg_catalog."default" NOT NULL,
 #     visibility character varying(20) COLLATE pg_catalog."default" NOT NULL,
-#     deleted_at timestamp with time zone,
+#     deleted_at timestamp default null,
 #     CONSTRAINT fk_signup FOREIGN KEY (userid)
 #         REFERENCES public.signup (userid) MATCH SIMPLE
 #         ON UPDATE NO ACTION

@@ -30,8 +30,6 @@ def response(type, status, content, message=None):
         elif status == 'unauthorized':
             return unauthorized(content, 'Delete', message)
         return failed(content, 'Delete', message)
-    # elif type == 'failed':
-    #     return failed(content, 'Proceed', message)
     else:
         return failed(content, 'Proceed', message)
 
@@ -89,3 +87,4 @@ def get_user_id(request):
     print(current_user)
 
     return  True,current_user["userid"]
+    

@@ -1,6 +1,5 @@
 from decouple import config
 
-
 def connect_to_db(app):
     db_connection = 'postgresql://{}:{}@{}:{}/{}'.format(
         config('user'),
@@ -13,3 +12,6 @@ def connect_to_db(app):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     
     return app
+
+
+    

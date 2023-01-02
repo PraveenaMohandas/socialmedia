@@ -23,3 +23,16 @@ def updateuserdata(updatedata,userid):
 
     except Exception as e:
         return response('failed', 'failed', {}, str(e))
+
+
+def friendslist():
+    try:
+        from app import collection
+        mongoquery ="select * from friends"
+        friendslist=fetch_records(mongoquery)
+        print(friendslist)
+        collection.insert_many(friendslist)
+        # collection.update_many(friendslist,upsert=True)
+    except Exception as e:
+        return response('failed', 'failed', {}, str(e))
+    

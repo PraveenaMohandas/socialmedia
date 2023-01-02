@@ -12,4 +12,6 @@ def create_app():
     homepage(app)
     middleware(app)
     global_errorhandler(app)
+    # app = connect_to_mongodb(app)
+
     return app
