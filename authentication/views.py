@@ -11,7 +11,7 @@ from flask import session, jsonify, make_response
 def signup_views(userrequest):
     try:
         userdata=userrequest
-        query="insert into signup (userid,first_name,last_name,email, password, gender, dob) values ('{userid}','{first_name}','{last_name}','{email}','{password}','{gender}','{dob}');".format(userid=userdata['userid'],first_name=userdata['firstname'],last_name=userdata['lastname'],
+        query="insert into users (userid,first_name,last_name,email, password, gender, dob) values ('{userid}','{first_name}','{last_name}','{email}','{password}','{gender}','{dob}');".format(userid=userdata['userid'],first_name=userdata['firstname'],last_name=userdata['lastname'],
         email=userdata['email'],
         password=userdata['password'],
         gender=userdata['gender'],
@@ -28,7 +28,7 @@ def login_views(email,password):
     try:
         from app import SECRET_KEY
         print(SECRET_KEY)
-        query = "select userid,password from signup where email='{email}';".format(email=email)
+        query = "select userid,password from users where email='{email}';".format(email=email)
         dbdata=fetch_records(query)
         print(dbdata)
         for i in range(len(dbdata)):

@@ -16,11 +16,14 @@ def middleware(app):
 
             if 'authentication' in api:
                 pass
+            elif 'csv' in api:
+                pass
             elif 'user' in api:
                 status=token_required(request)
                 print(status)
                 if not status:
                     return response('create', 'unauthorized', {})
+                   
             else:
                 return response('create', 'unauthorized', {})
         except Exception as e:

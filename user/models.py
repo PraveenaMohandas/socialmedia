@@ -1,6 +1,6 @@
 # -- SIGNUP TABLE CREATION QUERY --
 
-# CREATE TABLE IF NOT EXISTS public.signup
+# CREATE TABLE IF NOT EXISTS public.users
 # (
 #     userid integer NOT NULL,
 #     first_name character varying(50) COLLATE pg_catalog."default" NOT NULL,
@@ -9,14 +9,15 @@
 #     password character varying(50) COLLATE pg_catalog."default" NOT NULL,
 #     gender character varying(50) COLLATE pg_catalog."default" NOT NULL,
 #     dob character varying(50) COLLATE pg_catalog."default" NOT NULL,
-#     CONSTRAINT signup_pkey PRIMARY KEY (userid)
+#     subscribed BOOLEAN NOT NULL,
+#     CONSTRAINT users_pkey PRIMARY KEY (userid)
 # )
 # WITH (
 #     OIDS = FALSE
 # )
 # TABLESPACE pg_default;
 
-# ALTER TABLE IF EXISTS public.signup
+# ALTER TABLE IF EXISTS public.users
 #     OWNER to postgres;
 
 
@@ -27,8 +28,8 @@
 #     userid integer NOT NULL,
 #     receiverid character varying(50) COLLATE pg_catalog."default" NOT NULL,
 #     status character varying(50) COLLATE pg_catalog."default" NOT NULL,
-#     CONSTRAINT fk_signup FOREIGN KEY (userid)
-#         REFERENCES public.signup (userid) MATCH SIMPLE
+#     CONSTRAINT fk_users FOREIGN KEY (userid)
+#         REFERENCES public.users (userid) MATCH SIMPLE
 #         ON UPDATE NO ACTION
 #         ON DELETE NO ACTION
 # )
@@ -44,6 +45,7 @@
 
 # CREATE TABLE IF NOT EXISTS public.userfeed
 # (
+#     id integer PRIMARY KEY NOT NULL,
 #     userid integer NOT NULL,
 #     title character varying(50) COLLATE pg_catalog."default" NOT NULL,
 #     description character varying(50) COLLATE pg_catalog."default" NOT NULL,
@@ -52,8 +54,8 @@
 #     category character varying(50) COLLATE pg_catalog."default" NOT NULL,
 #     visibility character varying(20) COLLATE pg_catalog."default" NOT NULL,
 #     deleted_at timestamp default null,
-#     CONSTRAINT fk_signup FOREIGN KEY (userid)
-#         REFERENCES public.signup (userid) MATCH SIMPLE
+#     CONSTRAINT fk_users FOREIGN KEY (userid)
+#         REFERENCES public.users (userid) MATCH SIMPLE
 #         ON UPDATE NO ACTION
 #         ON DELETE NO ACTION
 # )

@@ -7,14 +7,16 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy(app)
 db.init_app(app)
 
+
+
 from dotenv import load_dotenv
 load_dotenv()
 
 # mail settings
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'praveenamk8@gmail.com'
-app.config['MAIL_PASSWORD'] = '***'
+app.config['MAIL_USERNAME'] = 'praveena.mohandas@divum.in'
+app.config['MAIL_PASSWORD'] = 'Praveena@divum'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
@@ -33,6 +35,9 @@ collection=socialmedia_db[collection_name]
 # client.list_database_names()
 
 
+# Redis Implementation 
+import redis
+cache = redis.Redis(host='localhost',port='6379',db=0)
 
 from flask_mail import Mail
 mail = Mail(app)

@@ -26,12 +26,11 @@ def signup_controller():
         
         userrequest=({"userid": userid,"firstname": firstname, "lastname" : lastname,"email":email,"password":password,"gender":gender,"dob":dob})
         token = s.dumps(email,salt='email-confirm')
-
-        msg = Message('Confirm Email', sender="praveenamk8@gmail.com",recipients=[email])
+        msg = Message('Confirm Email', sender="praveena.mohandas@divum.in",recipients=[email])
         link = url_for('authentication-api.confirm_email',token=token,_external=True)
         msg.body='Your link is {}'.format(link)
         from app import mail
-        # mail.send(msg)
+        mail.send(msg)
 
 
         return signup_views(userrequest)
@@ -39,7 +38,6 @@ def signup_controller():
 @authentication.route('confirm_email/<token>', methods=['GET','POST'])
 def confirm_email(token):
     try:
-        print("try")
         email=s.loads(token,salt='email-confirm',max_age=3600)
     except SignatureExpired:
         return "Token Expired"
@@ -56,3 +54,5 @@ def login_controller():
 @authentication.route('logout', methods=['POST'])
 def logout_controller():
     return logout_views(request)
+
+
