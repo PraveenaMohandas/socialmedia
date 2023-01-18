@@ -150,4 +150,3 @@ def getcsvdata():
         return response('create', 'success',"Saved")
     except Exception as e:
         return response('failed', 'failed', {}, str(e))
-

@@ -7,8 +7,6 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy(app)
 db.init_app(app)
 
-
-
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -46,6 +44,39 @@ import secrets
 app.config['SECRET_KEY'] = secrets.token_urlsafe(12)
 SECRET_KEY=app.config['SECRET_KEY']
 
+from apscheduler.schedulers.background import BackgroundScheduler
+# import atexit
+from flask_mail import Message
+
+def sendnewsletter():
+    with app.app_context():
+        from common.execute_raw_query import fetch_records
+        query = "select email from users where subscribed is TRUE;"
+        dbdata=fetch_records(query)
+        for i in range(len(dbdata)):
+            email=dbdata[i]['email']
+            print(email)
+            msg = Message('Newsletter', sender="praveena.mohandas@divum.in",recipients=[email])
+            msg.body='News Today'
+            mail.send(msg)
+
+scheduler = BackgroundScheduler({'apscheduler.timezone': 'UTC'})
+scheduler.add_job(func=sendnewsletter, trigger='cron',day='*',hour='10')
+# scheduler.add_job(func=sendnewsletter, trigger='cron',second='10')
+
+scheduler.start()
+
+# atexit.register(lambda: scheduler.shutdown())
+
+
+
+# from flask_crontab import Crontab
+# crontab = Crontab(app)
+# from user.controllers import do_something
+# @crontab.job(minute="1")
+# def my_scheduled_job():
+#     print("fun")
+#     do_something()
 
 
 if __name__ == "__main__":

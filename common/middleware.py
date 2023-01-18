@@ -52,3 +52,4 @@ def validate_auth_token(token):
         return 1
     except Exception as e:
         return -1
+

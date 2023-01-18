@@ -11,11 +11,11 @@ from flask import session, jsonify, make_response
 def signup_views(userrequest):
     try:
         userdata=userrequest
-        query="insert into users (userid,first_name,last_name,email, password, gender, dob) values ('{userid}','{first_name}','{last_name}','{email}','{password}','{gender}','{dob}');".format(userid=userdata['userid'],first_name=userdata['firstname'],last_name=userdata['lastname'],
+        query="insert into users (userid,first_name,last_name,email, password, gender, dob,subscribed) values ('{userid}','{first_name}','{last_name}','{email}','{password}','{gender}','{dob}','{subscribed}');".format(userid=userdata['userid'],first_name=userdata['firstname'],last_name=userdata['lastname'],
         email=userdata['email'],
         password=userdata['password'],
         gender=userdata['gender'],
-        dob=userdata['dob'])
+        dob=userdata['dob'],subscribed=userdata['subscribed'])
         execute_query_without_return_value(query)
         return response('create', 'success', {})
     except Exception as e:
@@ -57,3 +57,24 @@ def logout_views(request):
         return response('create', 'success', {}, "Logout Successful")
     except Exception as e:
         return response('create', 'failed', {}, str(e))
+
+
+def get_reset_token(email):
+    import uuid
+    reset_token = uuid.uuid4()
+    from datetime import datetime, timezone
+
+    dt = datetime.now(timezone.utc)
+    query="insert into resetpassword (email,reset_token,requested_on) values ('{email}','{reset_token}','{requested_on}');".format(reset_token=reset_token,email=email,requested_on=dt)
+    execute_query_without_return_value(query)
+    return reset_token
+
+def verify_reset_token(token):
+    try:
+        print(token)
+        query = "select email,reset_token from resetpassword where reset_token='{reset_token}';".format(reset_token=token)
+        dbdata=fetch_records(query)
+        return response('create', 'success', {}, "Reset Successful")
+    except Exception as e:
+        return response('create', 'failed', {}, str(e))
+

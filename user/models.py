@@ -66,3 +66,22 @@
 
 # ALTER TABLE IF EXISTS public.userfeed
 #     OWNER to postgres;
+
+
+# -- RESET PASSWORD TABLE
+
+# CREATE TABLE IF NOT EXISTS public.resetpassword
+# (
+#     id SERIAL primary key,
+#     email character varying(50) COLLATE pg_catalog."default" NOT NULL,
+#     reset_token character varying(50) COLLATE pg_catalog."default" NOT NULL,
+#     requested_on timestamp default null
+   
+# )
+# WITH (
+#     OIDS = FALSE
+# )
+# TABLESPACE pg_default;
+
+# ALTER TABLE IF EXISTS public.resetpassword
+#     OWNER to postgres;
